@@ -11,9 +11,7 @@ jobs:
         - name: Build React App
           run: npm install && npm run build
           
-  test:
-   runs-on: ubuntu-latest     
-    # TBD
+
     
   deploy:  
     runs-on: ubuntu-latest    
