@@ -1,4 +1,4 @@
-name: Worflow FE
+name: Workflow FE
 on:
   push:
     branches: [development, development-fe-wilker, main]    
@@ -43,4 +43,4 @@ jobs:
           name: build-artifact
           path: ./dist
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./dist/ s3://devops-grisi-reyes-fe --delete
+        run: aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET }} --delete
