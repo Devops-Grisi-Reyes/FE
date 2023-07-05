@@ -1,7 +1,10 @@
 name: Workflow FE
 on:
   push:
-    branches: [development, development-fe-wilker, main]    
+    branches: 
+      - development
+      - main
+      - staging
 jobs:
   build:
     runs-on: ubuntu-latest    
@@ -43,4 +46,14 @@ jobs:
           name: build-artifact
           path: ./dist
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_DEV }} --delete
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_PROD }} --delete
+          elif [ "${{ github.ref }}" == "refs/heads/development" ] || [ "${{ github.ref }}" == "refs/heads/development-fe-wilker" ]; then
+            aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_DEV }} --delete
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_STG }} --delete
+          else
+            echo "Invalid branch for deployment"
+            exit 1
+          fi
