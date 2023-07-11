@@ -53,6 +53,9 @@ jobs:
         with:
           name: build-artifact
           path: ./dist
+      - name: Check SonarQube Quality Gate Status
+        run: |
+          echo "Quality Gate Status: ${{ needs.sonarqube-quality-gate-check.outputs.quality_gate_status }}"
       - name: Deploy app build to S3 bucket
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
