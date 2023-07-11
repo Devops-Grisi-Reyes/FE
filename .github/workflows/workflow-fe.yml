@@ -36,9 +36,11 @@ jobs:
         # Force to fail step after specific time.
         timeout-minutes: 3
         env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}        
-    outputs:
-      quality_gate_status: ${{ steps.sonarqube-quality-gate-check.outputs.quality_gate_status }}
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Set Quality Gate status
+        id: set_status
+        run: echo "::set-output name=quality_gate_status::${{ steps.test.outputs.status }}"
+    
   deploy:
      runs-on: ubuntu-latest 
      needs: [build, test]
