@@ -36,7 +36,9 @@ jobs:
         # Force to fail step after specific time.
         timeout-minutes: 3
         env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}        
+    outputs:
+      quality_gate_status: ${{ steps.sonarqube-quality-gate-check.outputs.quality_gate_status }}
   deploy:
      runs-on: ubuntu-latest 
      needs: [build, test]
@@ -55,7 +57,7 @@ jobs:
           path: ./dist
       - name: Check SonarQube Quality Gate Status
         run: |
-          echo "Quality Gate Status: ${{ needs.sonarqube-quality-gate-check.outputs.quality_gate_status }}"
+          echo "Quality Gate Status: ${{ needs.test.outputs.quality_gate_status }}"
       - name: Deploy app build to S3 bucket
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
