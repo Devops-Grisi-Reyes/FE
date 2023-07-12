@@ -37,14 +37,12 @@ jobs:
         timeout-minutes: 3
         env:
          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
       - name: Use Quality Gate status
         run: |
           if [[ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" != "PASSED" ]]; then
             echo "Quality gate check failed. Exiting..."
             exit 1
-          fi
-  
+          fi  
   deploy:
      runs-on: ubuntu-latest 
      needs: [build, test]
@@ -65,7 +63,7 @@ jobs:
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_PROD }} --delete
-          elif [ "${{ github.ref }}" == "refs/heads/development" ] || [ "${{ github.ref }}" == "refs/heads/development-fe-wilker" ]; then
+          elif [ "${{ github.ref }}" == "refs/heads/development" ]; then
             aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_DEV }} --delete
           elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
             aws s3 sync ./dist/ s3://${{ secrets.S3_BUCKET_STG }} --delete
@@ -73,5 +71,3 @@ jobs:
             echo "Invalid branch for deployment"
             exit 1
           fi
-     
-
