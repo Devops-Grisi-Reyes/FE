@@ -76,5 +76,5 @@ jobs:
           fi
       - name: Check SonarQube Quality Gate Status
         run: |
-          echo "Quality Gate Status: ${{ needs.test.outputs.sonarqube-quality-gate-check }}"
+          echo "Quality Gate Status: ${{ needs.test.outputs.quality_gate_status }}"
 
