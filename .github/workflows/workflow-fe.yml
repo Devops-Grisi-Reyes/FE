@@ -40,7 +40,7 @@ jobs:
 
       - name: Use Quality Gate status
         run: |
-          if [[ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" != "passed" ]]; then
+          if [[ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" != "PASSED" ]]; then
             echo "Quality gate check failed. Exiting..."
             exit 1
           fi
