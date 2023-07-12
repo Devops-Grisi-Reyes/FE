@@ -50,6 +50,7 @@ jobs:
       - name: Check SonarQube Quality Gate Status
         run: |
           QUALITY_STATUS="${{ needs.test.outputs.quality_gate_status }}"
+          echo "::add-mask::$QUALITY_STATUS"
           echo "Quality Gate Status: $QUALITY_STATUS xx"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
