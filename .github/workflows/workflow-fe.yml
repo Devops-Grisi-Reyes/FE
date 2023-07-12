@@ -47,6 +47,10 @@ jobs:
      runs-on: ubuntu-latest 
      needs: [build, test]
      steps:       
+      - name: Check SonarQube Quality Gate Status
+        run: |
+          QUALITY_STATUS="${{ needs.test.outputs.quality_gate_status }}"
+          echo "Quality Gate Status: $QUALITY_STATUS xx"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -74,8 +78,5 @@ jobs:
             echo "Invalid branch for deployment"
             exit 1
           fi
-      - name: Check SonarQube Quality Gate Status
-        run: |
-          QUALITY_STATUS="${{ needs.test.outputs.quality_gate_status }}"
-          echo "Quality Gate Status: $QUALITY_STATUS"
+     
 
