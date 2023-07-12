@@ -37,33 +37,18 @@ jobs:
         timeout-minutes: 3
         env:
          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Set Quality Gate status
-        id: set_status        
-        run: echo "quality_gate_status=${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" >> $GITHUB_OUTPUT
-       
-      - name: Save Quality Gate status as artifact
-        run: |
-          echo "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" > quality-gate-status.txt
-          
-      - name: Archive build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: quality-gate-artifact
-          path: quality-gate-status.txt
-  deploy:
-     runs-on: ubuntu-latest 
-     needs: [build, test]
-     steps:     
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: quality-gate-artifact # Replace with the name of the artifact you specified in the previous job
 
       - name: Use Quality Gate status
         run: |
-          status=$(cat quality-gate-status.txt)
-          echo "Quality Gate status is $status"
-    
+          if [[ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" != "passed" ]]; then
+            echo "Quality gate check failed. Exiting..."
+            exit 1
+          fi
+  
+  deploy:
+     runs-on: ubuntu-latest 
+     needs: [build, test]
+     steps:          
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -75,10 +60,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact
-          path: ./dist
-      - name: Check SonarQube Quality Gate Status
-        run: |
-           echo "Quality Gate 2 status is $status"
+          path: ./dist   
       - name: Deploy app build to S3 bucket
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
