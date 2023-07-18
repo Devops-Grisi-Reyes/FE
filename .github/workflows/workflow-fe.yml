@@ -59,7 +59,7 @@ jobs:
         run: npm ci
 
       - name: Run Cypress E2E Tests
-        run: npx pnpm run cypress
+        run: npm run test:e2e
                    
   deploy:
      runs-on: ubuntu-latest 
