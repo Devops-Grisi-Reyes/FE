@@ -76,7 +76,7 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
-        run: npx cypress run
+        uses: cypress-io/github-action@v5
                    
   deploy:
      runs-on: ubuntu-latest 
