@@ -6,7 +6,8 @@
     "format": "prettier --write .",
     "build": "webpack --mode=production",
     "analyze": "webpack --env analyze",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:e2e": "npx cypress run"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
