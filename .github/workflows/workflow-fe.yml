@@ -5,7 +5,6 @@ on:
       - development
       - main
       - staging
-      - development-wilker-e2e-implementation
 jobs:
   build:
     runs-on: ubuntu-latest    
