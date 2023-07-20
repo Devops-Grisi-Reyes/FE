@@ -5,6 +5,14 @@ on:
       - development
       - main
       - staging
+      
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN}}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  
 jobs:
   build:
     runs-on: ubuntu-latest    
@@ -31,8 +39,7 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
             # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
@@ -40,7 +47,7 @@ jobs:
         # Force to fail step after specific time.
         timeout-minutes: 3
         env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+         SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
       - name: Use Quality Gate status
         run: |
           if [[ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" != "PASSED" ]]; then
@@ -58,10 +65,10 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
@@ -89,10 +96,10 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
       - name: Download build artifacts
         uses: actions/download-artifact@v2
         with:
