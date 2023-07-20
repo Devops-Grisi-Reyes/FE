@@ -1,5 +1,5 @@
 describe('Home page and navigation tests', () => {
-  var baseUrl = 'https://devops-grisi-reyes-fe.s3.amazonaws.com/index.html';
+  var baseUrl = 'https://devops-grisi-reyes-fe-predeploy.s3.amazonaws.com/index.html';
   beforeEach(() => {
     cy.visit(baseUrl)
   })

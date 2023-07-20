@@ -1,5 +1,5 @@
 describe('Planets page tests', () => {
-    var baseUrl = 'https://devops-grisi-reyes-fe.s3.amazonaws.com/index.html';
+    var baseUrl = 'https://devops-grisi-reyes-fe-predeploy.s3.amazonaws.com/index.html';
     beforeEach(() => {
         cy.visit(baseUrl)
         cy.get('#single-spa-application\\:\\@react-mf\\/navbar > div > div:nth-child(1) > a:nth-child(2)')
